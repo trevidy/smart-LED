@@ -1,0 +1,13 @@
+# MicroPython
+*.mpy
+__pycache__/
+
+# VS Code (project-specific noise)
+.vscode/settings.json
+
+# Pico extension metadata (board-specific)
+.micropico
+
+# OS junk
+.DS_Store
+Thumbs.db
