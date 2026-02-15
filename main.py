@@ -1,24 +1,22 @@
-from machine import Pin, PWM
+import network
 import time
+from secrets import SSID, PASSWORD
+TIMEOUT = 20
 
-pwm = PWM(Pin(15))
-pwm.freq(1000)
+timeout = TIMEOUT
+start = time.time()
 
-try:
-    while True:
-        # def: duty_u16 is 0 to 65535 (100%)
-        # increase duty cycle by 500 steps / increase brightness
-        # every 100ms
-        for duty in range(0,65535,500): 
-            pwm.duty_u16(duty)
-            time.sleep(0.01)
-        # decrease duty cycle by 500 steps / decrease brightness
-        # every 100ms
-        for duty in range(65535,0,-500):
-            pwm.duty_u16(duty)
-            time.sleep(0.01)
+# connect to the router
+wlan = network.WLAN(network.STA_IF)
 
-# clean-up 
-finally:
-    pwm.deinit()
-    Pin(15,Pin.OUT).off()
+# power on the CYW43 Wi-Fi chip
+wlan.active(True)
+wlan.connect(SSID,PASSWORD)
+
+while not wlan.isconnected():
+    # if elapsed time is greater than TIMEOUT time, raise an error.
+    if time.time() - start>timeout:
+        raise RuntimeError("WiFi connection failed")
+    time.sleep(0.5)
+
+print("IP:", wlan.ifconfig()[0])
