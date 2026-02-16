@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Deploy to Pico",
+      "type": "shell",
+      "command": "mpremote",
+      "args": [
+        "connect", "COM6",
+        "fs", "cp",
+        "main.py",
+        "server.py",
+        "routes.py",
+        "led.py",
+        "wifi.py",
+        "constants.py",
+        "web.py",
+        "secrets.py",
+        ":"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Pico",
+      "type": "shell",
+      "command": "mpremote",
+      "args": [
+        "connect", "COM6",
+        "run", "main.py"
+      ],
+      "dependsOn": ["Deploy to Pico"],
+      "problemMatcher": []
+    }
+  ]
+}
